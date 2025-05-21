@@ -4,14 +4,13 @@ export default function Page({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* Header Navigation */}
-      <header className="flex justify-between items-center px-8 py-9 border-b border-gray-200">
+      <header className="flex justify-between items-center px-2 h-30 border-b border-gray-200">
         <div className="flex items-center gap-2">
-          <img 
-            src="/api/placeholder/50/50" 
-            alt="HSV Logo" 
-            className="w-10 h-10 text-green-500"
+          <img
+            src="/assets/svg/logo.svg"
+            alt="HSV Logo"
+            className="w-25 h-25 text-green-500"
           />
-          <span className="text-green-600 font-medium">HSV</span>
         </div>
 
         <div className="flex-1 text-center">
@@ -33,7 +32,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
               </svg>
             </div>
           </a>
-          
+
           {/* Add Icon */}
           <a href="#" className="text-green-600 hover:text-green-800">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
@@ -42,7 +41,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
               </svg>
             </div>
           </a>
-          
+
           {/* Calendar Icon */}
           <a href="#" className="text-green-600 hover:text-green-800 relative">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
@@ -52,7 +51,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
             </div>
             <span className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white">1</span>
           </a>
-          
+
           {/* Settings Icon */}
           <a href="#" className="text-gray-400 hover:text-gray-600">
             <div className="w-10 h-10 rounded-full flex items-center justify-center">
@@ -61,7 +60,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
               </svg>
             </div>
           </a>
-          
+
           {/* Logout Icon */}
           <a href="#" className="text-green-600 hover:text-green-800 mt-auto">
             <div className="w-10 h-10 rounded-full flex items-center justify-center">
@@ -71,7 +70,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
             </div>
           </a>
         </aside>
-        
+
         {/* Main Content Area */}
         <main className="flex-1">
           {children}

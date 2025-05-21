@@ -1,81 +1,87 @@
-import React from 'react';
 
-export default function Page() {
-  return (
-<> 
-      <div className="p-8">
-        <h2 className="text-4xl font-medium text-green-800 mb-8">Vos Rendez-vous</h2>
-        
-        <div className="space-y-6 max-w-4xl">
-          {/* Premier rendez-vous */}
-          <div className="bg-gray-100 rounded-lg shadow p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-2xl font-medium">Cardiologue</h3>
-                <p className="text-gray-700 mt-1">Docteur Thierry Doberman</p>
-                <p className="text-lg font-medium mt-2">11H - 12h</p>
-                
-                <div className="flex items-center gap-6 mt-4">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-600">19 mai 2025</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-600">38 rue du normand</span>
-                  </div>
-                </div>
-              </div>
-              
-              <button className="text-2xl font-medium">X</button>
-            </div>
-          </div>
-          
-          {/* Deuxième rendez-vous (sélectionné) */}
-          <div className="bg-white border-2 rounded-lg shadow p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-2xl font-medium">Orthopediste</h3>
-                <p className="text-gray-700 mt-1">Docteur Armand Caniche</p>
-                <p className="text-lg font-medium mt-2">11H - 12h</p>
-                
-                <div className="flex items-center gap-6 mt-4">
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-600">19 mai 2025</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <svg className="w-5 h-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-600">38 rue du normand</span>
-                  </div>
-                </div>
-              </div>
-              
-              <button className="text-2xl font-medium">X</button>
-            </div>
-          </div>
+"use client";
 
-          {/* Bouton pour ajouter un nouveau rendez-vous */}
-          <div className="mt-8">
-            <button className="bg-green-100 text-green-800 rounded-md px-6 py-3 hover:bg-green-200 transition-colors flex items-center">
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Planifier un nouveau rendez-vous
-            </button>
-          </div>
-        </div>
-      </div>
- </>
-  );
+import AppointmentCard from './appointmentCard';
+import React, { useState } from 'react';
+import api from '@/lib/client/api';
+interface Appointment {
+  id: number;
+  specialite: string;
+  docteur: string;
+  heureDebut: string;
+  heureFin: string;
+  date: string;
+  adresse: string;
 }
+// const data = await api.getPatientAppointments(1):
+
+const initialAppointments: Appointment[] = [
+  {
+    id: 1,
+    specialite: "Cardiologue",
+    docteur: "Thierry Doberman",
+    heureDebut: "11H",
+    heureFin: "12h",
+    date: "19 mai 2025",
+    adresse: "38 rue du normand"
+  },
+  {
+    id: 2,
+    specialite: "Orthopédiste",
+    docteur: "Armand Caniche",
+    heureDebut: "14H",
+    heureFin: "16h",
+    date: "21 mai 2025",
+    adresse: "38 rue du normand"
+  }
+];
+
+// Composant sans état (stateless)
+const Page: React.FC = () => {
+  // State local pour gérer les rendez-vous
+  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+
+  // Fonction de suppression
+  const handleDelete = (id: number) => {
+    setAppointments((prev) => prev.filter(app => app.id !== id));
+  };
+
+
+ return (
+    <div className="p-4 md:p-8">
+      <h2 className="text-3xl md:text-4xl font-medium text-green-800 mb-6 md:mb-8">Vos Rendez-vous</h2>
+
+      {appointments.length > 0 ? (
+        <div className="space-y-4 md:space-y-6 max-w-4xl">
+          {appointments.map((appointment) => (
+            <AppointmentCard
+              key={appointment.id}
+              specialite={appointment.specialite}
+              docteur={appointment.docteur}
+              heureDebut={appointment.heureDebut}
+              heureFin={appointment.heureFin}
+              date={appointment.date}
+              adresse={appointment.adresse}
+              onDelete={() => handleDelete(appointment.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-gray-50 rounded-lg p-8 text-center mb-6">
+          <p className="text-gray-600 text-lg">Vous n'avez pas de rendez-vous planifiés</p>
+        </div>
+      )}
+
+      <div className="mt-8">
+        <button className="bg-green-100 text-green-800 rounded-md px-4 py-3 md:px-6 hover:bg-green-200 transition-colors flex items-center">
+          <svg className="w-5 h-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
+          Planifier un nouveau rendez-vous
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Page;

@@ -54,6 +54,9 @@ const api = {
   createAppointment: (appointmentData: any) => 
     fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
   getAppointments: () => fetchAPI('/appointments'),
+  getPatientAppointments: (patientId: number) =>
+    fetchAPI(`/patients/${patientId}/appointments`),
+
 };
 
 export default api;

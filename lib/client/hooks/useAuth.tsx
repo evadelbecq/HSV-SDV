@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (token) {
       // Verify token and get user data
       verifyToken();
+        console.log(token)
     } else {
       setLoading(false);
     }
@@ -41,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await api.verifyToken();
       setUser(userData);
     } catch (error) {
-      localStorage.removeItem('token');
+      console.error('Token verification failed:', error);
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,15 @@
 "use client";
+/* Import API File */
+import api from "@/lib/client/api";
+
+/* Import Hooks */
+import { useEffect, useState } from "react";
+
 /* Import Image */
 import Image from "next/image";
 import HeroImage from "@/public/assets/trombi/hero_image_4k-Photoroom.png";
-/* Import Assets */
-// import Logo from "@/public/assets/svg/HSV-removebg-preview.svg";
 import Logo from "@/public/assets/svg/HSV-removebg-preview.svg";
+
 
 /* import UI Components */
 import { Button } from "@/components/ui/button";
@@ -42,6 +47,80 @@ export default function Page() {
       name: "Contactez-nous",
     },
   ];
+
+  // Update your Doctor interface to match the actual data structure
+  interface Doctor {
+    doctor_id: number;
+    user: {
+      user_id: number;
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+    };
+    specialization: {
+      specialization_id: number;
+      name: string;
+    };
+  }
+
+  interface ProfilePhoto {
+    photoNamePath: string;
+  }
+
+  const profilePhotos: ProfilePhoto[] = [
+    {
+      photoNamePath: "/assets/trombi/JeanBon.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/ClaireVoyant.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/AnneTerieur.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/EllaBoration.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/AliMentation.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/EmmaGlomérule.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/LucIde.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/IrisCopie.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/PhilDair.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/RayDation.png"
+    },
+    {
+      photoNamePath: "/assets/trombi/ArtieCulation.png"
+    },
+  ];
+
+  /* FetchDoctors */
+
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await api.getDoctors();
+        setDoctors(response);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
   return (
     <>
       <nav className=" flex flex-row justify-between bg-white border-2 h-auto p-4">
@@ -116,10 +195,46 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Doctor Carrousel */}
-      <section>
-        <div>
+      {/* Doctor Carousel */}
+      <section className="w-full">
+        <div className="grid grid-cols-3 gap-8 max-w-6xl mx-auto mt-20">
           {/* Fetch data from the Doctor table, then map and extract only the wanted infos*/}
+          {doctors.map((doctor, doctorIndex) => (
+            <Card key={doctor.doctor_id} className="flex flex-col items-center p-6 hover:shadow-lg transition-shadow">
+              {/* Profile photo */}
+              <div className="h-48 w-48 rounded-full overflow-hidden mb-4 bg-[#05C481]/10">
+                {doctorIndex < profilePhotos.length ? (
+                  <Image
+                    src={profilePhotos[doctorIndex].photoNamePath}
+                    alt={`Dr. ${doctor.user.first_name} ${doctor.user.last_name}`}
+                    width={200}
+                    height={200}
+                    className="object-cover w-full h-full"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#05C481]/20 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 text-[#008057]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Doctor information */}
+              <CardTitle className="text-center mb-2">
+                Dr. {doctor.user.first_name} {doctor.user.last_name}
+              </CardTitle>
+              <p className="text-[#05C481] text-center font-medium mb-2">
+                {doctor.specialization ? doctor.specialization.name : "Spécialiste"}
+              </p>
+              <CardContent className="text-center">
+                <p className="line-clamp-3 mb-4 text-gray-600">
+                  {doctor.description || "Spécialiste disponible pour consultation"}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
 

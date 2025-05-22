@@ -51,6 +51,8 @@ const api = {
   
   // Patient endpoints
   getPatientById: (id: number) => fetchAPI(`/patients/${id}`),
+
+  // 
   
   // Appointment endpoints
   createAppointment: (appointmentData: undefined) => 

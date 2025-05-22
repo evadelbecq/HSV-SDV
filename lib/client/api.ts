@@ -58,6 +58,7 @@ const api = {
   getAppointments: () => fetchAPI('/appointments'),
   getPatientAppointments: (patientId: number) =>
     fetchAPI(`/patients/${patientId}/appointments`),
+  getSpecializations: () => fetchAPI('/specializations'),
 
   verifyToken: () => {
       const token = localStorage.getItem('token');

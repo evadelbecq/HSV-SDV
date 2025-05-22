@@ -9,7 +9,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
           <img
             src="/assets/svg/logo.svg"
             alt="HSV Logo"
-            className="w-25 h-25 text-green-500"
+            className="w-[100px] h-auto text-green-500"
           />
         </div>
 

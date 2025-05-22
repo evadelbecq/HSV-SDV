@@ -1,3 +1,5 @@
+import { verify } from "crypto";
+
 // lib/client/api.ts
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -54,6 +56,20 @@ const api = {
   createAppointment: (appointmentData: any) => 
     fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
   getAppointments: () => fetchAPI('/appointments'),
+
+  verifyToken: () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+      
+      return fetchAPI('/verify-token', {
+        method: 'GET',
+        headers: {
+          'Authorization': `${token}`
+        }
+      });
+    }
 };
 
 export default api;

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react'
-import api from '@/lib/api/api';
+import api from '@/lib/client/api';
 
 
     

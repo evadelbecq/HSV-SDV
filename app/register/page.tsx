@@ -74,7 +74,6 @@ const Register = () => {
                 router.replace("/dashboard");
               }
             }
-          }
           )
           .catch((error) => {
             // Handle login error

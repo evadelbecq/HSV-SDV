@@ -61,20 +61,20 @@ const Register = () => {
     console.log(onSubmit)
     api.register(values)
       .then((response) => {
-        
         auth.login(values.email, values.password)
           .then(() => {
+            
             // Access user from auth context instead of response
             if (auth.user) {
+              api.createPatient(auth.user.userId)
               console.log("Login successful", auth.user);
               
               // Redirect based on user role
-                router.replace("/dashboard/patient/list-rdv");
+                // router.replace("/dashboard/patient/list-rdv");
               } else {
-                router.replace("/dashboard");
-              }
+                // router.replace("/register");
+              } 
             }
-          }
           )
           .catch((error) => {
             // Handle login error

@@ -1,6 +1,6 @@
 'use client';
 
-
+import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 
 
 const Login = () => {
@@ -65,16 +66,23 @@ const Login = () => {
   
   return (
     <div>
-      <div className="absolute w-full h-full z-0">
-        <Image src={formImage} alt="background" fill className="object-cover" />
+      <div className="fixed inset-0 right-1/3 z-0 bg-gray-900">
+        <Image 
+          src={formImage} 
+          alt="background" 
+          fill 
+          className="object-cover opacity-80"
+          priority
+        />
       </div>
       <div className="relative flex z-10 bg-transparent">
           <div className="w-1/3">
 
           </div>
-          <div className="w-2/3 h-full bg-white p-8 rounded-lg shadow-lg">
+          <div className="w-2/3 h-screen bg-white p-8 rounded-lg shadow-lg">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 h-full flex flex-col justify-center">
+                <h1 className='text-center text-3xl' >Connection</h1>
                 <FormField
                   control={form.control}
                   name="email"
@@ -82,7 +90,7 @@ const Login = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Email" {...field} />
+                        <Input placeholder="exemple@gmail.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -93,15 +101,16 @@ const Login = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>Mot de passe</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Password" {...field} />
+                        <PasswordInput placeholder="mot de passe" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Login</Button>
+                <Button type="submit">Se connecter</Button>
+                <Link href="/register" className="underline">Créer un compte</Link>
               </form>
             </Form>
           </div>

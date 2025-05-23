@@ -1,10 +1,10 @@
-
 "use client";
 
 import AppointmentCard from './appointmentCard';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '@/lib/client/api';
 import { useAuth } from '@/lib/client/hooks/useAuth'
+
 interface Appointment {
   id: number;
   specialite: string;
@@ -15,72 +15,150 @@ interface Appointment {
   adresse: string;
 }
 
-
-
-const initialAppointments: Appointment[] = [
-  {
-    id: 1,
-    specialite: "Cardiologue",
-    docteur: "Thierry Doberman",
-    heureDebut: "11H",
-    heureFin: "12h",
-    date: "19 mai 2025",
-    adresse: "38 rue du normand"
-  },
-  {
-    id: 2,
-    specialite: "Orthopédiste",
-    docteur: "Armand Caniche",
-    heureDebut: "14H",
-    heureFin: "16h",
-    date: "21 mai 2025",
-    adresse: "38 rue du normand"
-  }
-];
-
-// Composant sans état (stateless)
 const Page: React.FC = () => {
   // State local pour gérer les rendez-vous
-  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const auth = useAuth();
 
-
-  // recuperation de l'id du user
-
-  // recuperer l'id du patient pour le user id connecté
-  async function fetchPatientId() {
+  // Récupération de l'id du patient pour le user id connecté
+  const fetchPatientId = async (): Promise<number | null> => {
     try {
       const user_id = auth.user?.user_id || 0;
-      console.log("User ID lol:", user_id);
-
+      console.log("User ID:", user_id);
+      
       const response = await api.getPatientById(user_id);
       const patientId = response.patient_id;
-      console.log("Patient ID:", patientId);
       return patientId;
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching patient ID:", error);
+      setError("Erreur lors de la récupération de l'ID patient");
+      return null;
     }
-  }
-  // Appel de la fonction pour récupérer l'ID du patient
-
-  // Récupération des rendez-vous du patient
-async function fetchAppointments() {
-  
-  const patientid = await fetchPatientId();
-  console.log("Patient ID2:", patientid);
-  const appointments = await api.getPatientAppointments(patientid);
-  console.log("Appointments:", appointments);
-}
-fetchAppointments();
-
-
-
-  // Fonction de suppression
-  const handleDelete = (id: number) => {
-    setAppointments((prev) => prev.filter(app => app.id !== id));
   };
 
+  // Récupération des rendez-vous du patient
+  const fetchAppointments = async (): Promise<void> => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const patientId = await fetchPatientId();
+      if (!patientId) {
+        setError("Impossible de récupérer l'ID patient");
+        return;
+      }
+      
+      console.log("Patient ID:", patientId);
+      const appointmentsData = await api.getPatientAppointments(patientId);
+      console.log("Appointments:", appointmentsData);
+      
+      // Mapper les données de l'API vers le format attendu par le composant
+      const formattedAppointments: Appointment[] = appointmentsData.map((apt: any) => {
+        // Formatage des dates et heures
+        const startDate = new Date(apt.start_date);
+        const endDate = new Date(apt.end_date);
+    
+        
+        // Formatage de la date (ex: "25 mai 2025")
+        const dateFormatted = startDate.toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        
+        // Formatage des heures (ex: "16:30")
+        const heureDebut = startDate.toLocaleTimeString('fr-FR', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        const heureFin = endDate.toLocaleTimeString('fr-FR', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        // recupération du nom du docteur 
+        async function getDoctorName(doctorId: number) {
+          try {
+            const doctorData = await api.getDoctorById(doctorId);
+            console.log("Doctor Data:", doctorData);
+            return doctorData.user.last_name + " " + doctorData.user.first_name || "Inconnu";
+          } catch (error) {
+            console.error("Error fetching doctor name:", error);
+            return "Docteur Inconnu";
+          }
+        }
+        return {
+          id: apt.appointment_id,
+          specialite: apt.specialite || apt.specialty || "Consultation générale",
+          docteur: apt.doctor_name || getDoctorName(apt.doctor_id) || " Inconnu",
+          heureDebut: heureDebut,
+          heureFin: heureFin,
+          date: dateFormatted,
+          adresse: apt.address || apt.adresse || "30 rue du normand"
+        };
+      });
+      
+      setAppointments(formattedAppointments);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+      setError("Erreur lors de la récupération des rendez-vous");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Charger les rendez-vous au montage du composant
+  useEffect(() => {
+    if (auth.user) {
+      fetchAppointments();
+    }
+  }, [auth.user]);
+
+  // Fonction de suppression
+  const handleDelete = async (id: number) => {
+    try {
+      // Optionnel : Appeler l'API pour supprimer le rendez-vous côté serveur
+      // await api.deleteAppointment(id);
+      
+      // Mettre à jour l'état local
+      setAppointments((prev) => prev.filter(app => app.id !== id));
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+      setError("Erreur lors de la suppression du rendez-vous");
+    }
+  };
+
+  // Affichage pendant le chargement
+  if (loading) {
+    return (
+      <div className="p-4 md:p-8">
+        <h2 className="text-3xl md:text-4xl font-medium text-green-800 mb-6 md:mb-8">Vos Rendez-vous</h2>
+        <div className="bg-gray-50 rounded-lg p-8 text-center mb-6">
+          <p className="text-gray-600 text-lg">Chargement de vos rendez-vous...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Affichage en cas d'erreur
+  if (error) {
+    return (
+      <div className="p-4 md:p-8">
+        <h2 className="text-3xl md:text-4xl font-medium text-green-800 mb-6 md:mb-8">Vos Rendez-vous</h2>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center mb-6">
+          <p className="text-red-600 text-lg">{error}</p>
+          <button 
+            onClick={fetchAppointments}
+            className="mt-4 bg-red-100 text-red-800 rounded-md px-4 py-2 hover:bg-red-200 transition-colors"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8">

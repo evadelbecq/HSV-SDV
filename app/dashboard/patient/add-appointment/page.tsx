@@ -161,9 +161,10 @@ const AppointmentBooking: React.FC = () => {
   };
 
   const calculateEndDateTime = (startDateTime: string): string => {
-    const start = new Date(startDateTime);
-    const end = new Date(start.getTime() + 60 * 60 * 1000);
-    return end.toISOString().slice(0, 19);
+    const startDate = new Date(startDateTime);
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 1); // Ajoute 1 heure
+    return endDate.toISOString();
   };
 
   // Fonction pour récupérer l'ID du patient

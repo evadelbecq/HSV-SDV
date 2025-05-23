@@ -4,6 +4,7 @@
 import AppointmentCard from './appointmentCard';
 import React, { useState } from 'react';
 import api from '@/lib/client/api';
+import { useAuth } from '@/lib/client/hooks/useAuth'
 interface Appointment {
   id: number;
   specialite: string;
@@ -13,7 +14,8 @@ interface Appointment {
   date: string;
   adresse: string;
 }
-// const data = await api.getPatientAppointments(1):
+
+
 
 const initialAppointments: Appointment[] = [
   {
@@ -40,6 +42,39 @@ const initialAppointments: Appointment[] = [
 const Page: React.FC = () => {
   // State local pour gérer les rendez-vous
   const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+  const auth = useAuth();
+
+
+  // recuperation de l'id du user
+
+  // recuperer l'id du patient pour le user id connecté
+  async function fetchPatientId() {
+    try {
+      const user_id = auth.user?.user_id || 0;
+      console.log("User ID lol:", user_id);
+
+      const response = await api.getPatientById(user_id);
+      const patientId = response.patient_id;
+      console.log("Patient ID:", patientId);
+      return patientId;
+    }
+    catch (error) {
+      console.error("Error fetching patient ID:", error);
+    }
+  }
+  // Appel de la fonction pour récupérer l'ID du patient
+
+  // Récupération des rendez-vous du patient
+async function fetchAppointments() {
+  
+  const patientid = await fetchPatientId();
+  console.log("Patient ID2:", patientid);
+  const appointments = await api.getPatientAppointments(patientid);
+  console.log("Appointments:", appointments);
+}
+fetchAppointments();
+
+
 
   // Fonction de suppression
   const handleDelete = (id: number) => {
@@ -47,7 +82,7 @@ const Page: React.FC = () => {
   };
 
 
- return (
+  return (
     <div className="p-4 md:p-8">
       <h2 className="text-3xl md:text-4xl font-medium text-green-800 mb-6 md:mb-8">Vos Rendez-vous</h2>
 

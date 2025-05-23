@@ -31,7 +31,7 @@ const Register = () => {
       first_name: z.string().min(1, "Le prénom ne doit pas être vide"),
       last_name: z.string().min(1, "Le nom ne doit pas être vide"),
       phone: z.string().regex(/^\d{10}$/, "Le numéro de téléphone doit contenir 10 chiffres").trim(),
-      email: z.string().email("Adresse e-mail invalide"),
+      email: z.string().email("Adresse e-mail invalide").trim(),
       password: z.string().min(1, "Le mot de passe ne doit pas être vide"),
       passwordConfirmation: z.string().min(1, "La confirmation du mot de passe ne doit pas être vide"),
     }).superRefine(({ passwordConfirmation, password }, ctx) => {
@@ -63,18 +63,12 @@ const Register = () => {
       .then((response) => {
         auth.login(values.email, values.password)
           .then(() => {
-            
-            // Access user from auth context instead of response
             if (auth.user) {
-              api.createPatient(auth.user.user_id)
               console.log("Login successful", auth.user);
-              
-              // Redirect based on user role
-                // router.replace("/dashboard/patient/list-rdv");
-              } else {
-                // router.replace("/register");
-              } 
+              api.createPatient(auth.user.user_id)
+              router.replace("/dashboard/patient/list-rdv");
             }
+          }
           )
           .catch((error) => {
             // Handle login error
@@ -86,6 +80,10 @@ const Register = () => {
       .catch((error) => {
         // Handle registration error
         console.error("Registration failed", error);
+        form.setError("email", {
+          type: "manual",
+          message: "Cet email est déjà utilisé",
+        });
       }
     );
   }
@@ -104,15 +102,16 @@ const Register = () => {
           <div className="w-1/3">
 
           </div>
-          <div className="w-2/3 h-screen bg-white p-8 rounded-lg shadow-lg">
+          <div className="flex items-center w-2/3 min-h-screen bg-white p-8 rounded-lg shadow-lg">
+            <div className="w-full">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 h-full flex flex-col justify-center">
-                <h1 className='text-center text-3xl' >Connection</h1>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-3 gap-3 space-y-8 h-full">
+                <h1 className='col-span-3 text-center text-3xl' >Créer un compte</h1>
                 <FormField
                   control={form.control}
                   name="first_name"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-1">
                       <FormLabel>Prénom</FormLabel>
                       <FormControl>
                         <Input placeholder="John" {...field} />
@@ -125,7 +124,7 @@ const Register = () => {
                   control={form.control}
                   name="last_name"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-2">
                       <FormLabel>Nom</FormLabel>
                       <FormControl>
                         <Input placeholder="Doe" {...field} />
@@ -138,7 +137,7 @@ const Register = () => {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-2">
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="exemple@gmail.com" {...field} />
@@ -151,7 +150,7 @@ const Register = () => {
                   control={form.control}
                   name="phone"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-1">
                       <FormLabel>Numéro de télephone</FormLabel>
                       <FormControl>
                         <Input placeholder="0732495046" {...field} />
@@ -164,7 +163,7 @@ const Register = () => {
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-3">
                       <FormLabel>Mot de passe</FormLabel>
                       <FormControl>
                         <PasswordInput placeholder="mot de passe" {...field} />
@@ -177,7 +176,7 @@ const Register = () => {
                   control={form.control}
                   name="passwordConfirmation"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-3">
                       <FormLabel>Confirmer le mot de passe</FormLabel>
                       <FormControl>
                         <PasswordInput placeholder="mot de passe" {...field} />
@@ -186,10 +185,14 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Créer un compte</Button>
-                <Link href="/login" className="underline">Se connecter</Link>
+                <div className="flex flex-col items-center gap-3 col-span-3">
+                  <Button type="submit">Créer un compte</Button>
+                  <Link href="/login" className="underline">Se connecter</Link>
+                </div>
+ 
               </form>
             </Form>
+            </div>
           </div>
       </div>
     </div>

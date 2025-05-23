@@ -49,6 +49,7 @@ const api = {
   
   // Patient endpoints
   getPatientById: (id: number) => fetchAPI(`/patients/${id}`),
+  createPatient: (user_id: number) => fetchAPI(`/patients`, { method: 'POST', body: { user_id } }),
   
   // Appointment endpoints
   createAppointment: (appointmentData: any) => 

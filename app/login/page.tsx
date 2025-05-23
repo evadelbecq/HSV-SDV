@@ -59,6 +59,14 @@ const Login = () => {
       })
       .catch((error) => {
         // Handle login error
+        form.setError("email", {
+          type: "manual",
+          message: "Email ou mot de passe incorrect",
+        });
+        form.setError("password", {
+          type: "manual",
+          message: "Email ou mot de passe incorrect",
+        });
         console.error("Login failed", error);
       });
   }
@@ -79,7 +87,7 @@ const Login = () => {
           <div className="w-1/3">
 
           </div>
-          <div className="w-2/3 h-screen bg-white p-8 rounded-lg shadow-lg">
+          <div className="w-2/3 min-h-screen bg-white p-8 rounded-lg shadow-lg">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 h-full flex flex-col justify-center">
                 <h1 className='text-center text-3xl' >Connection</h1>

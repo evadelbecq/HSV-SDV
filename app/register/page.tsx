@@ -66,7 +66,7 @@ const Register = () => {
             
             // Access user from auth context instead of response
             if (auth.user) {
-              api.createPatient(auth.user.userId)
+              api.createPatient(auth.user.user_id)
               console.log("Login successful", auth.user);
               
               // Redirect based on user role

@@ -70,6 +70,7 @@ const Register = () => {
             }
           }
           )
+          
           .catch((error) => {
             // Handle login error
             console.error("Login failed", error);

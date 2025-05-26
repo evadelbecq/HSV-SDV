@@ -4,6 +4,7 @@ import api from "@/lib/client/api";
 
 /* Import Hooks */
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 /* Import Image */
 import Image from "next/image";
@@ -27,6 +28,13 @@ import LinkedinIcon from "@/public/assets/icons/linkedin-svgrepo-com.svg";
 import GoogleIcon from "@/public/assets/icons/google-plus-svgrepo-com.svg";
 import SendMailIcon from "@/public/assets/icons/send-svgrepo-com.svg";
 
+const scrollToSection = (id: string) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
 export default function Page() {
   interface Links {
     name: string;
@@ -36,14 +44,15 @@ export default function Page() {
   const links: Links[] = [
     {
       name: "Nos Practiciens",
-      url: "#",
+      url: "doctors",
     },
     {
       name: "Nos Services",
-      url: "#",
+      url: "services",
     },
     {
       name: "Contactez-nous",
+      url: "contact",
     },
   ];
 
@@ -143,19 +152,23 @@ export default function Page() {
         <div className="flex items-center space-x-72">
           <ul>
             {links.map((link, index) => (
-              <li key={index} className="inline-block p-2 mr-8">
-                <a href={link.url ? link.url : ""}>{link.name}</a>
+              <li key={index} className="inline-block p-2 mr-8 cursor-pointer">
+                <a onClick={() => link.url ? scrollToSection(link.url) : null}>{link.name}</a>
               </li>
             ))}
           </ul>
 
           <div className="pr-2">
-            <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
-              Inscrivez-vous
-            </Button>
-            <Button className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481] ml-4">
-              Connexion
-            </Button>
+            <Link href="/register">
+              <Button className="bg-[#05C481] text-black hover:bg-[#008057]" >
+                Inscrivez-vous
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481] ml-4">
+                Connexion
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -177,10 +190,16 @@ export default function Page() {
 
           {/* CTA Buttons */}
           <section className="flex flex-col justify-center mt-8 space-y-4 w-1/4 mx-auto">
-            <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
-              Prendre rendez-vous
-            </Button>
-            <Button className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481]">
+            <Link href={"/login"}>
+                <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
+                Prendre rendez-vous
+              </Button>
+            </Link>
+
+            <Button 
+              className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481]"
+              onClick={() => scrollToSection("doctors")}
+            >
               Découvrez notre équipe
             </Button>
           </section>
@@ -207,9 +226,9 @@ export default function Page() {
       </section>
 
       {/* Doctor Carousel */}
-      <section className="w-full py-12">
+      <section className="w-full py-12" id="doctors">
         <div className="flex flex-col items-center justify-center mt-15 px-4">
-          <h2 className="text-4xl font-medium mt-15">
+          <h2 className="text-4xl font-medium mt-15" >
             <span className="text-[#05C481]">N</span>os Practiciens
           </h2>
           <h5 className="text-2xl mt-10 mb-12 max-w-3xl text-center">
@@ -344,7 +363,7 @@ export default function Page() {
       </section>
 
       {/* Section Services du site */}
-      <section className="flex flex-col items-center justify-center mt-15 px-4">
+      <section className="flex flex-col items-center justify-center mt-15 px-4" id="services">
         <div className="mt-15 text-[##002f22] text-center mb-10">
           <h2 className="text-4xl font-medium mt-15">
             <span className="text-[#05C481]">N</span>os Services
@@ -404,7 +423,7 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#05C481]/25 text-[#002f22] mt-20 pt-5">
+      <footer className="bg-[#05C481]/25 text-[#002f22] mt-20 pt-5" id="contact">
         <div className="container mx-auto py-10">
           {/* Top Footer Section */}
           <div className="grid md:grid-cols-3 gap-8 border-b border-[#05C481]/20 pb-8">

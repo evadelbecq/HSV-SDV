@@ -2,14 +2,39 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
+import api from '@/lib/client/api';
+import { useAuth } from '@/lib/client/hooks/useAuth'
 /* Import Logo */
 import Logo from "@/public/assets/svg/HSV-removebg-preview - Copie.svg"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 
-    const [currentDatetime, setCurrentDateTime] = React.useState<string>("");
+    const [currentDatetime, setCurrentDateTime] = useState<string>("");
+    const [patientName, setPatientName] = useState<string>("Chargement..."); // State pour le nom du patient
+    const auth = useAuth();
+
+    // Fonction pour récupérer le nom du patient
+    async function fetchPatientname() {
+        try {
+            const user_id = auth.user?.user_id || 0;
+            console.log("User ID:", user_id);
+
+            const response = await api.getPatientById(user_id);
+            console.log("Response:", response);
+
+            // Récupérer le nom depuis la Promise result
+            const firstName = response.user?.first_name || '';
+            const lastName = response.user?.last_name || '';
+
+            // Retourner le nom complet
+            return `${firstName} ${lastName}`.trim() || "Utilisateur";
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération du nom du patient:", error);
+            return "John Doe"; // Valeur par défaut en cas d'erreur
+        }
+    }
 
     useEffect(() => {
         /* Récupérer la date afin de la reformater en format français */
@@ -22,28 +47,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 year: 'numeric'
             };
 
-        // Format attendu : "Vendredi 27 juin 2025 14:18"
-        const dateString = now_date.toLocaleDateString('fr-FR', options);
-        const timeString = now_date.toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+            // Format attendu : "Vendredi 27 juin 2025 14:18"
+            const dateString = now_date.toLocaleDateString('fr-FR', options);
+            const timeString = now_date.toLocaleTimeString('fr-FR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
 
-        // Première lettre en majuscule
-        const formattedDate = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-        setCurrentDateTime(`${formattedDate} ${timeString}`);
+            // Première lettre en majuscule
+            const formattedDate = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+            setCurrentDateTime(`${formattedDate} ${timeString}`);
         };
 
         // Mettre à jour l'heure dès le chargement de la page
-
         dateFrenchFormat();
 
         // Mettre à jour l'heure toutes les secondes
-    const intervalId = setInterval(dateFrenchFormat, 1000);
-    
-    // Nettoyer l'intervalle lors du démontage du composant
-    return () => clearInterval(intervalId);
-  }, []);
+        const intervalId = setInterval(dateFrenchFormat, 1000);
+
+        // Nettoyer l'intervalle lors du démontage du composant
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // useEffect pour récupérer le nom du patient
+    useEffect(() => {
+        const loadPatientName = async () => {
+            if (auth.user?.user_id) {
+                const name = await fetchPatientname();
+                setPatientName(name);
+            }
+        };
+
+        loadPatientName();
+    }, [auth.user?.user_id]); // Se déclenche quand l'user_id change
 
     return (
         <div>
@@ -54,7 +90,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
 
                 <div className="flex-1 text-center">
-                    <h1 className="text-xl text-gray-800">Bonjour, John Doe !</h1>
+                    <h1 className="text-gray-500">Bienvenue, {patientName}</h1>
                 </div>
 
                 <div className="text-green-700">

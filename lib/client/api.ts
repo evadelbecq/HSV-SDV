@@ -40,7 +40,7 @@ const api = {
   // Auth endpoints
   login: (email: string, password: string) => 
     fetchAPI('/login', { method: 'POST', body: { email, password } }),
-  register: (userData: undefined) => 
+  register: (userData: any) => 
     fetchAPI('/register', { method: 'POST', body: userData }),
   
   // Doctor endpoints
@@ -53,7 +53,7 @@ const api = {
   getAllPatients: () => fetchAPI('/patients'),
 
   // Appointment endpoints
-  createAppointment: (appointmentData: undefined) => 
+  createAppointment: (appointmentData: any) => 
     fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
   getAppointments: () => fetchAPI('/appointments'),
   getPatientAppointments: (patientId: number) =>

@@ -7,7 +7,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
       <header className="flex justify-between items-center px-2 h-30 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <img
-            src="/assets/svg/logo.svg"
+            src="/assets/svg/HSV-removebg-preview - Copie.svg"
             alt="HSV Logo"
             className="w-[100px] h-auto text-green-500"
           />

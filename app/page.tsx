@@ -9,7 +9,7 @@ import Link from "next/link";
 /* Import Image */
 import Image from "next/image";
 import HeroImage from "@/public/assets/trombi/hero_image_4k-Photoroom.png";
-import Logo from "@/public/assets/svg/HSV-removebg-preview.svg";
+import Logo from "@/public/assets/svg/HSV-removebg-preview - Copie.svg";
 
 /* import UI Components */
 import { Button } from "@/components/ui/button";

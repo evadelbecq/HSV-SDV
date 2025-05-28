@@ -508,7 +508,7 @@ const AppointmentBooking: React.FC = () => {
                   disabled={isLoading}
                 />
                 <label htmlFor="robot-check" className="text-sm text-gray-700 cursor-pointer">
-                  I'm not a robot
+                  I&aposm not a robot
                 </label>
                 <div className="ml-4">
                   <div className="w-8 h-8 border-2 border-blue-500 rounded">

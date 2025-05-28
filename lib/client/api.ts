@@ -1,7 +1,5 @@
-import { verify } from "crypto";
-
 // lib/client/api.ts
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_URL = process.env.BACKEND_PORT || 'http://localhost:4000/api';
 
 type FetchOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -51,13 +49,18 @@ const api = {
   
   // Patient endpoints
   getPatientById: (id: number) => fetchAPI(`/patients/${id}`),
+  createPatient: (user_id: number) => fetchAPI(`/patients`, { method: 'POST', body: { user_id } }),
+  getAllPatients: () => fetchAPI('/patients'),
 
-  // 
-  
   // Appointment endpoints
   createAppointment: (appointmentData: undefined) => 
     fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
   getAppointments: () => fetchAPI('/appointments'),
+  getPatientAppointments: (patientId: number) =>
+    fetchAPI(`/patients/${patientId}/appointments`),
+  getSpecializations: () => fetchAPI('/specializations'),
+  getAllReasonsBySpecializationId: (specializationId: number) =>
+    fetchAPI(`/specializations/${specializationId}/reasons`),
 
   verifyToken: () => {
       const token = localStorage.getItem('token');

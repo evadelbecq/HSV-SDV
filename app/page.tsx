@@ -25,7 +25,10 @@ import CalendarIcon from "@/public/assets/icons/calendar-svgrepo-com.svg";
 import FacebookIcon from "@/public/assets/icons/facebook-svgrepo-com.svg";
 import LinkedinIcon from "@/public/assets/icons/linkedin-svgrepo-com.svg";
 import GoogleIcon from "@/public/assets/icons/google-plus-svgrepo-com.svg";
+import TrackingIcon from "@/public/assets/icons/analytics-seo-and-web-svgrepo-com.svg"
 import SendMailIcon from "@/public/assets/icons/send-svgrepo-com.svg";
+import ShieldIcon from "@/public/assets/icons/shield-svgrepo-com.svg";
+import LoupeIcon from "@/public/assets/icons/loupe-search-svgrepo-com.svg";
 
 export default function Page() {
   interface Links {
@@ -335,8 +338,9 @@ export default function Page() {
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`h-3 w-3 mx-1 rounded-full ${index === activeIndex ? "bg-[#05C481]" : "bg-[#05C481]/30"
-                  }`}
+                className={`h-3 w-3 mx-1 rounded-full ${
+                  index === activeIndex ? "bg-[#05C481]" : "bg-[#05C481]/30"
+                }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
@@ -384,20 +388,64 @@ export default function Page() {
           <Card className="flex flex-col items-center p-6">
             <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
               <Image
-                src={CalendarIcon}
-                alt="Calendar Icon"
+                src={TrackingIcon}
+                alt="Tracking Icon"
                 width={50}
                 height={50}
                 priority
               />
             </div>
             <CardTitle className="text-center mb-4">
-              Téléconsultation sécurisée
+              Historique et suivi des rendez-vous
             </CardTitle>
             <CardContent className="text-center">
               <p>
-                Consultez à distance avec nos praticiens via notre plateforme
-                sécurisée et accessible.
+                Consultez vos rendez-vous passés et à venir, annulez ou modifiez
+                en quelques clics.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Card 3 */}
+          <Card className="flex flex-col items-center p-6">
+            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
+              <Image
+                src={LoupeIcon}
+                alt="Loupe Icon"
+                width={50}
+                height={50}
+                priority
+              />
+            </div>
+            <CardTitle className="text-center mb-4">
+              Recherche intelligente par spécialité et localisation
+            </CardTitle>
+            <CardContent className="text-center">
+              <p>
+                Filtrez rapidement selon vos besoins : spécialité, horaires
+                disponibles...
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Card 4 */}
+          <Card className="flex flex-col items-center p-6">
+            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
+              <Image
+                src={ShieldIcon}
+                alt="Shield Icon"
+                width={50}
+                height={50}
+                priority
+              />
+            </div>
+            <CardTitle className="text-center mb-4">
+              Sécurité et confidentialité
+            </CardTitle>
+            <CardContent className="text-center">
+              <p>
+                Vos données sont protégées selon les normes RGPD et hébergées
+                sur des serveurs agréés santé.
               </p>
             </CardContent>
           </Card>

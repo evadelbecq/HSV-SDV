@@ -26,7 +26,10 @@ import CalendarIcon from "@/public/assets/icons/calendar-svgrepo-com.svg";
 import FacebookIcon from "@/public/assets/icons/facebook-svgrepo-com.svg";
 import LinkedinIcon from "@/public/assets/icons/linkedin-svgrepo-com.svg";
 import GoogleIcon from "@/public/assets/icons/google-plus-svgrepo-com.svg";
+import TrackingIcon from "@/public/assets/icons/analytics-seo-and-web-svgrepo-com.svg"
 import SendMailIcon from "@/public/assets/icons/send-svgrepo-com.svg";
+import ShieldIcon from "@/public/assets/icons/shield-svgrepo-com.svg";
+import LoupeIcon from "@/public/assets/icons/loupe-search-svgrepo-com.svg";
 
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id);
@@ -130,6 +133,7 @@ export default function Page() {
   }, []);
 
   /* Caroussel Logic */
+
   const [activeIndex, setActiveIndex] = useState(0);
   const nextTestimonial = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % doctors.length);
@@ -143,7 +147,7 @@ export default function Page() {
 
   return (
     <>
-      <nav className=" flex flex-row justify-between bg-white border-2 h-auto p-4">
+      <nav className=" flex flex-row justify-between bg-white border-2 h-auto p-4 bg-[#ebfef5]/75">
         {/* Logo HSV */}
         <div className="w-[100px]">
           <Image src={Logo} alt="HSV Logo" width={100} height={50} />
@@ -152,20 +156,27 @@ export default function Page() {
         <div className="flex items-center space-x-72">
           <ul>
             {links.map((link, index) => (
-              <li key={index} className="inline-block p-2 mr-8 cursor-pointer">
-                <a onClick={() => link.url ? scrollToSection(link.url) : null}>{link.name}</a>
+              <li
+                key={index}
+                className="inline-block p-2 mr-8 cursor-pointer text-[#002f22] font-medium hover:text-[#05c481] transition-colors"
+              >
+                <a
+                  onClick={() => (link.url ? scrollToSection(link.url) : null)}
+                >
+                  {link.name}
+                </a>
               </li>
             ))}
           </ul>
 
           <div className="pr-2">
             <Link href="/register">
-              <Button className="bg-[#05C481] text-black hover:bg-[#008057]" >
+              <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
                 Inscrivez-vous
               </Button>
             </Link>
             <Link href="/login">
-              <Button className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481] ml-4">
+              <Button className="bg-white text-[#002f22] hover:bg-[#05C481] border-2 border-[#05C481] ml-4">
                 Connexion
               </Button>
             </Link>
@@ -191,12 +202,12 @@ export default function Page() {
           {/* CTA Buttons */}
           <section className="flex flex-col justify-center mt-8 space-y-4 w-1/4 mx-auto">
             <Link href={"/login"}>
-                <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
+              <Button className="bg-[#05C481] text-black hover:bg-[#008057]">
                 Prendre rendez-vous
               </Button>
             </Link>
 
-            <Button 
+            <Button
               className="bg-white text-black hover:bg-[#05C481] border-2 border-[#05C481]"
               onClick={() => scrollToSection("doctors")}
             >
@@ -228,7 +239,7 @@ export default function Page() {
       {/* Doctor Carousel */}
       <section className="w-full py-12" id="doctors">
         <div className="flex flex-col items-center justify-center mt-15 px-4">
-          <h2 className="text-4xl font-medium mt-15" >
+          <h2 className="text-4xl font-medium mt-15">
             <span className="text-[#05C481]">N</span>os Practiciens
           </h2>
           <h5 className="text-2xl mt-10 mb-12 max-w-3xl text-center">
@@ -353,8 +364,9 @@ export default function Page() {
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`h-3 w-3 mx-1 rounded-full ${index === activeIndex ? "bg-[#05C481]" : "bg-[#05C481]/30"
-                  }`}
+                className={`h-3 w-3 mx-1 rounded-full ${
+                  index === activeIndex ? "bg-[#05C481]" : "bg-[#05C481]/30"
+                }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
@@ -363,7 +375,10 @@ export default function Page() {
       </section>
 
       {/* Section Services du site */}
-      <section className="flex flex-col items-center justify-center mt-15 px-4" id="services">
+      <section
+        className="flex flex-col items-center justify-center mt-15 px-4"
+        id="services"
+      >
         <div className="mt-15 text-[##002f22] text-center mb-10">
           <h2 className="text-4xl font-medium mt-15">
             <span className="text-[#05C481]">N</span>os Services
@@ -402,20 +417,64 @@ export default function Page() {
           <Card className="flex flex-col items-center p-6">
             <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
               <Image
-                src={CalendarIcon}
-                alt="Calendar Icon"
+                src={TrackingIcon}
+                alt="Tracking Icon"
                 width={50}
                 height={50}
                 priority
               />
             </div>
             <CardTitle className="text-center mb-4">
-              Téléconsultation sécurisée
+              Historique et suivi des rendez-vous
             </CardTitle>
             <CardContent className="text-center">
               <p>
-                Consultez à distance avec nos praticiens via notre plateforme
-                sécurisée et accessible.
+                Consultez vos rendez-vous passés et à venir, annulez ou modifiez
+                en quelques clics.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Card 3 */}
+          <Card className="flex flex-col items-center p-6">
+            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
+              <Image
+                src={LoupeIcon}
+                alt="Loupe Icon"
+                width={50}
+                height={50}
+                priority
+              />
+            </div>
+            <CardTitle className="text-center mb-4">
+              Recherche intelligente par spécialité et localisation
+            </CardTitle>
+            <CardContent className="text-center">
+              <p>
+                Filtrez rapidement selon vos besoins : spécialité, horaires
+                disponibles...
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Card 4 */}
+          <Card className="flex flex-col items-center p-6">
+            <div className="flex items-center justify-center h-20 w-20 rounded-full bg-[#05C481]/10 mb-4">
+              <Image
+                src={ShieldIcon}
+                alt="Shield Icon"
+                width={50}
+                height={50}
+                priority
+              />
+            </div>
+            <CardTitle className="text-center mb-4">
+              Sécurité et confidentialité
+            </CardTitle>
+            <CardContent className="text-center">
+              <p>
+                Vos données sont protégées selon les normes RGPD et hébergées
+                sur des serveurs agréés santé.
               </p>
             </CardContent>
           </Card>
@@ -423,7 +482,10 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#05C481]/25 text-[#002f22] mt-20 pt-5" id="contact">
+      <footer
+        className="bg-[#05C481]/25 text-[#002f22] mt-20 pt-5"
+        id="contact"
+      >
         <div className="container mx-auto py-10">
           {/* Top Footer Section */}
           <div className="grid md:grid-cols-3 gap-8 border-b border-[#05C481]/20 pb-8">

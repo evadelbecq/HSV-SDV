@@ -1,18 +1,23 @@
 // lib/client/api.ts
-const API_URL = process.env.BACKEND_PORT || 'http://localhost:4000/api';
+const API_URL = process.env.BACKEND_PORT || "http://localhost:3001/api";
 
 type FetchOptions = {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   credentials?: RequestCredentials;
 };
 
 async function fetchAPI(endpoint: string, options: FetchOptions = {}) {
-  const { method = 'GET', headers = {}, body, credentials = 'include' } = options;
-  
+  const {
+    method = "GET",
+    headers = {},
+    body,
+    credentials = "include",
+  } = options;
+
   const requestHeaders: HeadersInit = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...headers,
   };
 
@@ -26,12 +31,12 @@ async function fetchAPI(endpoint: string, options: FetchOptions = {}) {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'API request failed');
+      throw new Error(error.message || "API request failed");
     }
 
     return await response.json();
   } catch (error) {
-    console.error('API request error:', error);
+    console.error("API request error:", error);
     throw error;
   }
 }
@@ -44,13 +49,14 @@ const api = {
     fetchAPI('/register', { method: 'POST', body: userData }),
   
   // Doctor endpoints
-  getDoctors: () => fetchAPI('/doctors'),
+  getDoctors: () => fetchAPI("/doctors"),
   getDoctorById: (id: number) => fetchAPI(`/doctors/${id}`),
-  
+
   // Patient endpoints
   getPatientById: (id: number) => fetchAPI(`/patients/${id}`),
-  createPatient: (user_id: number) => fetchAPI(`/patients`, { method: 'POST', body: { user_id } }),
-  getAllPatients: () => fetchAPI('/patients'),
+  createPatient: (user_id: number) =>
+    fetchAPI(`/patients`, { method: "POST", body: { user_id } }),
+  getAllPatients: () => fetchAPI("/patients"),
 
   // Appointment endpoints
   createAppointment: (appointmentData: any) => 

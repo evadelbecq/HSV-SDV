@@ -147,7 +147,7 @@ export default function Page() {
 
   return (
     <>
-      <nav className=" flex flex-row justify-between bg-white border-2 h-auto p-4 bg-[#ebfef5]/75">
+      <nav className=" flex flex-row justify-between border-2 h-auto p-4 bg-[#ebfef5]/75">
         {/* Logo HSV */}
         <div className="w-[100px]">
           <Image src={Logo} alt="HSV Logo" width={100} height={50} />

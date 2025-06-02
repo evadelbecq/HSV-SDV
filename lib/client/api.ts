@@ -43,11 +43,11 @@ async function fetchAPI(endpoint: string, options: FetchOptions = {}) {
 
 const api = {
   // Auth endpoints
-  login: (email: string, password: string) =>
-    fetchAPI("/login", { method: "POST", body: { email, password } }),
-  register: (userData: undefined) =>
-    fetchAPI("/register", { method: "POST", body: userData }),
-
+  login: (email: string, password: string) => 
+    fetchAPI('/login', { method: 'POST', body: { email, password } }),
+  register: (userData: any) => 
+    fetchAPI('/register', { method: 'POST', body: userData }),
+  
   // Doctor endpoints
   getDoctors: () => fetchAPI("/doctors"),
   getDoctorById: (id: number) => fetchAPI(`/doctors/${id}`),
@@ -59,33 +59,31 @@ const api = {
   getAllPatients: () => fetchAPI("/patients"),
 
   // Appointment endpoints
-  createAppointment: (appointmentData: {
-    patient_id: number;
-    doctor_id: number;
-    reason_id: number;
-    start_date: string;
-    end_date: string;
-  }) => fetchAPI("/appointments", { method: "POST", body: appointmentData }),
-  getAppointments: () => fetchAPI("/appointments"),
+  createAppointment: (appointmentData: any) => 
+    fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
+  getAppointments: () => fetchAPI('/appointments'),
   getPatientAppointments: (patientId: number) =>
     fetchAPI(`/patients/${patientId}/appointments`),
-  getSpecializations: () => fetchAPI("/specializations"),
+  getAppointmentsByDoctorId: (doctorId: number) =>
+    fetchAPI(`/doctors/${doctorId}/appointments`),
+
+  getSpecializations: () => fetchAPI('/specializations'),
   getAllReasonsBySpecializationId: (specializationId: number) =>
     fetchAPI(`/specializations/${specializationId}/reasons`),
 
   verifyToken: () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      throw new Error("No token found");
+      throw new Error('No token found');
     }
-
-    return fetchAPI("/verify-token", {
-      method: "GET",
+    
+    return fetchAPI('/verify-token', {
+      method: 'GET',
       headers: {
-        Authorization: `${token}`,
-      },
+        'Authorization': `${token}`
+      }
     });
-  },
+  }
 };
 
 export default api;

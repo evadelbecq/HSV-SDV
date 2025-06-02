@@ -40,7 +40,7 @@ const api = {
   // Auth endpoints
   login: (email: string, password: string) => 
     fetchAPI('/login', { method: 'POST', body: { email, password } }),
-  register: (userData: undefined) => 
+  register: (userData: any) => 
     fetchAPI('/register', { method: 'POST', body: userData }),
   
   // Doctor endpoints
@@ -53,28 +53,31 @@ const api = {
   getAllPatients: () => fetchAPI('/patients'),
 
   // Appointment endpoints
-  createAppointment: (appointmentData: undefined) => 
+  createAppointment: (appointmentData: any) => 
     fetchAPI('/appointments', { method: 'POST', body: appointmentData }),
   getAppointments: () => fetchAPI('/appointments'),
   getPatientAppointments: (patientId: number) =>
     fetchAPI(`/patients/${patientId}/appointments`),
+  getAppointmentsByDoctorId: (doctorId: number) =>
+    fetchAPI(`/doctors/${doctorId}/appointments`),
+
   getSpecializations: () => fetchAPI('/specializations'),
   getAllReasonsBySpecializationId: (specializationId: number) =>
     fetchAPI(`/specializations/${specializationId}/reasons`),
 
   verifyToken: () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No token found');
-      }
-      
-      return fetchAPI('/verify-token', {
-        method: 'GET',
-        headers: {
-          'Authorization': `${token}`
-        }
-      });
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found');
     }
+    
+    return fetchAPI('/verify-token', {
+      method: 'GET',
+      headers: {
+        'Authorization': `${token}`
+      }
+    });
+  }
 };
 
 export default api;
